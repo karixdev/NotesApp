@@ -24,14 +24,14 @@ public class RestControllerExceptionHandler {
                 ExceptionResponse.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
-                        .error(exception.getMessage())
-                        .path(request.getRequestURI())
+                        .message(exception.getMessage())
+                        .errors(Map.of())
                         .build(),
                 HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidatorExceptionResponse> methodArgumentNotValid(
+    public ResponseEntity<ExceptionResponse> methodArgumentNotValid(
         MethodArgumentNotValidException exception,
         HttpServletRequest request
     ) {
@@ -44,14 +44,12 @@ public class RestControllerExceptionHandler {
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 
         return new ResponseEntity<>(
-                ValidatorExceptionResponse.builder()
+                ExceptionResponse.builder()
                         .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.NOT_FOUND.value())
-                        .error("Validation failed")
-                        .constraints(constraintsMap)
-                        .path(request.getRequestURI())
-                        .build()
-                , HttpStatus.BAD_REQUEST);
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message("Provided data is not valid")
+                        .errors(constraintsMap)
+                        .build(),
+                HttpStatus.BAD_REQUEST);
     }
-
 }
