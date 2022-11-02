@@ -9,7 +9,15 @@ import java.util.*;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Entity(name = "Folder")
-@Table(name = "folder")
+@Table(
+        name = "folder",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "folder_name_unique",
+                        columnNames = "name"
+                )
+        }
+)
 @Getter
 @Setter
 @AllArgsConstructor
