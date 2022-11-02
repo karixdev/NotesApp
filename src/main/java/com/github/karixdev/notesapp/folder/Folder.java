@@ -49,6 +49,10 @@ public class Folder {
     )
     private Set<Note> notes = new LinkedHashSet<>();
 
+    public Folder(String name) {
+        this.name = name;
+    }
+
     public void addNote(Note note) {
         if (!this.notes.contains(note)) {
             this.notes.add(note);
