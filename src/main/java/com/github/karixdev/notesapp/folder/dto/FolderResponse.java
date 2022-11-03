@@ -17,6 +17,10 @@ public class FolderResponse {
     private Long id;
     private String name;
 
-    @JsonIgnoreProperties({"folder"})
+    @JsonIgnoreProperties({
+            "folder",
+            "content",
+            "noteColor"
+    })
     private Set<Note> notes;
 }
