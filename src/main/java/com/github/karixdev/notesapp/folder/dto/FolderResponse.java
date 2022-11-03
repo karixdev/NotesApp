@@ -1,5 +1,7 @@
 package com.github.karixdev.notesapp.folder.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.karixdev.notesapp.note.Note;
 import lombok.*;
 
@@ -14,5 +16,7 @@ import java.util.Set;
 public class FolderResponse {
     private Long id;
     private String name;
+
+    @JsonIgnoreProperties({"folder"})
     private Set<Note> notes;
 }
