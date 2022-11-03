@@ -17,5 +17,5 @@ public class FolderRequest {
     @Size(min = 2, max = 255)
     @NotEmpty
     @UniqueFolderName
-    String name;
+    private String name;
 }
