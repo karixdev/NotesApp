@@ -1,6 +1,6 @@
 package com.github.karixdev.notesapp.folder.dto;
 
-import com.github.karixdev.notesapp.folder.validation.UniqueFolderName;
+import com.github.karixdev.notesapp.validation.UniqueFolderName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

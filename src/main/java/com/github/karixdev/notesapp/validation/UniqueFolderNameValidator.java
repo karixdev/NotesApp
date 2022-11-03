@@ -1,4 +1,4 @@
-package com.github.karixdev.notesapp.folder.validation;
+package com.github.karixdev.notesapp.validation;
 
 import com.github.karixdev.notesapp.folder.FolderRepository;
 import lombok.RequiredArgsConstructor;

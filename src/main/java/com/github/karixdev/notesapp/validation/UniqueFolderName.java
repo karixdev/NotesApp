@@ -1,4 +1,4 @@
-package com.github.karixdev.notesapp.folder.validation;
+package com.github.karixdev.notesapp.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
