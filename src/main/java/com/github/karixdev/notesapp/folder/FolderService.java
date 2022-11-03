@@ -60,7 +60,7 @@ public class FolderService {
                 });
     }
 
-    private FolderResponse mapFolderToFolderResponse(Folder folder) {
+    public FolderResponse mapFolderToFolderResponse(Folder folder) {
         return FolderResponse.builder()
                 .id(folder.getId())
                 .name(folder.getName())
