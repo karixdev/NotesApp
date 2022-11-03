@@ -25,6 +25,7 @@ public class RestControllerExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
                         .message(exception.getMessage())
+                        .path(request.getRequestURI())
                         .errors(Map.of())
                         .build(),
                 HttpStatus.NOT_FOUND);
@@ -48,6 +49,7 @@ public class RestControllerExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
                         .message("Provided data is not valid")
+                        .path(request.getRequestURI())
                         .errors(constraintsMap)
                         .build(),
                 HttpStatus.BAD_REQUEST);
