@@ -63,7 +63,7 @@ public class RestControllerExceptionHandler {
                 ExceptionResponse.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                        .error("Provided illegal arguments")
+                        .error(exception.getMessage())
                         .path(request.getRequestURI())
                         .build(),
                 HttpStatus.BAD_REQUEST);
