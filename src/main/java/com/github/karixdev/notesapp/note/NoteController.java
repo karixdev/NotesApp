@@ -3,12 +3,12 @@ package com.github.karixdev.notesapp.note;
 import com.github.karixdev.notesapp.note.dto.NoteRequest;
 import com.github.karixdev.notesapp.note.dto.NoteResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,8 +19,11 @@ public class NoteController {
     private final NoteService noteService;
 
     @GetMapping("/collection")
-    public List<NoteResponse> getAll() {
-        return noteService.getAll();
+    public Page<NoteResponse> getAll(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size
+    ) {
+        return noteService.getAll(page, size);
     }
 
     @GetMapping

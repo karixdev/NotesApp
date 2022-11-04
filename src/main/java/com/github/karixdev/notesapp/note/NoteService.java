@@ -6,10 +6,10 @@ import com.github.karixdev.notesapp.folder.FolderService;
 import com.github.karixdev.notesapp.note.dto.NoteRequest;
 import com.github.karixdev.notesapp.note.dto.NoteResponse;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,11 +19,11 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final FolderService folderService;
 
-    public List<NoteResponse> getAll() {
-        return noteRepository.findAll()
-                .stream()
-                .map(this::mapNoteToNoteResponse)
-                .toList();
+    public Page<NoteResponse> getAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Note> notes = noteRepository.findAll(pageRequest);
+
+        return notes.map(this::mapNoteToNoteResponse);
     }
 
     public NoteResponse getById(Long id) {
