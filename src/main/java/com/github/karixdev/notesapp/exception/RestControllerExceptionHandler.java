@@ -24,9 +24,8 @@ public class RestControllerExceptionHandler {
                 ExceptionResponse.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
-                        .message(exception.getMessage())
+                        .error(exception.getMessage())
                         .path(request.getRequestURI())
-                        .errors(Map.of())
                         .build(),
                 HttpStatus.NOT_FOUND);
     }
@@ -48,9 +47,24 @@ public class RestControllerExceptionHandler {
                 ExceptionResponse.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
-                        .message("Provided data is not valid")
+                        .error("Provided data is not valid")
                         .path(request.getRequestURI())
                         .errors(constraintsMap)
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ExceptionResponse> illegalArgument(
+            IllegalArgumentException exception,
+            HttpServletRequest request
+    ) {
+        return new ResponseEntity<>(
+                ExceptionResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                        .error("Provided illegal arguments")
+                        .path(request.getRequestURI())
                         .build(),
                 HttpStatus.BAD_REQUEST);
     }
