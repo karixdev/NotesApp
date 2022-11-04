@@ -22,5 +22,6 @@ public class FolderResponse {
             "content",
             "noteColor"
     })
-    private Set<Note> notes;
+    @Builder.Default
+    private Set<Note> notes = new LinkedHashSet<>();
 }

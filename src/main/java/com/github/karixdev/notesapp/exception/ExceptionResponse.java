@@ -1,7 +1,9 @@
 package com.github.karixdev.notesapp.exception;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.Singular;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,5 +17,7 @@ public class ExceptionResponse {
     private final int status;
     private final String message;
     private final String path;
-    private final Map<String, String> errors;
+
+    @Builder.Default
+    private final Map<String, String> errors = new HashMap<>();
 }

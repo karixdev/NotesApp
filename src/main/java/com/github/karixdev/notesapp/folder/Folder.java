@@ -47,6 +47,7 @@ public class Folder {
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
+    @Builder.Default
     private Set<Note> notes = new LinkedHashSet<>();
 
     public Folder(String name) {
