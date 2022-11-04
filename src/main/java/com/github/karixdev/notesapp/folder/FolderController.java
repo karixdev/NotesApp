@@ -3,6 +3,7 @@ package com.github.karixdev.notesapp.folder;
 import com.github.karixdev.notesapp.folder.dto.FolderResponse;
 import com.github.karixdev.notesapp.folder.dto.FolderRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,11 @@ public class FolderController {
     private final FolderService folderService;
 
     @GetMapping("/collection")
-    public List<FolderResponse> getAll() {
-        return folderService.getAll();
+    public Page<FolderResponse> getAll(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size
+    ) {
+        return folderService.getAll(page, size);
     }
 
     @GetMapping

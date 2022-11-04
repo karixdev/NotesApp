@@ -1,12 +1,13 @@
 package com.github.karixdev.notesapp.folder;
 
 import com.github.karixdev.notesapp.exception.ResourceNotFoundException;
-import com.github.karixdev.notesapp.folder.dto.FolderResponse;
 import com.github.karixdev.notesapp.folder.dto.FolderRequest;
+import com.github.karixdev.notesapp.folder.dto.FolderResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,11 +25,11 @@ public class FolderService {
         return mapFolderToFolderResponse(folder);
     }
 
-    public List<FolderResponse> getAll() {
-        return folderRepository.findAll()
-                .stream()
-                .map(this::mapFolderToFolderResponse)
-                .toList();
+    public Page<FolderResponse> getAll(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Folder> folders = folderRepository.findAll(pageRequest);
+
+        return folders.map(this::mapFolderToFolderResponse);
     }
 
     public FolderResponse getById(Long id) {
