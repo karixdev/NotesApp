@@ -21,7 +21,7 @@ public class NoteService {
 
     public Page<NoteResponse> getAll(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Note> notes = noteRepository.findAll(pageRequest);
+        Page<Note> notes = noteRepository.findAllNotes(pageRequest);
 
         return notes.map(this::mapNoteToNoteResponse);
     }

@@ -27,7 +27,7 @@ public class FolderService {
 
     public Page<FolderResponse> getAll(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Folder> folders = folderRepository.findAll(pageRequest);
+        Page<Folder> folders = folderRepository.findAllPosts(pageRequest);
 
         return folders.map(this::mapFolderToFolderResponse);
     }
