@@ -9,7 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,6 +60,37 @@ public class FolderServiceTest {
 
         // Then
         assertEquals(folderResponse, result);
+    }
+
+    @Test
+    void GivenInvalidPaginationData_WhenGetAll_ThenThrowsException() {
+        // Given
+        int page = 0;
+        int size = 0;
+
+        // When & Then
+        assertThrows(IllegalArgumentException.class,
+                () -> underTest.getAll(page, size));
+    }
+
+    @Test
+    void GivenCorrectPaginationData_WhenGetAll_ThenReturnsCorrectObject() {
+        // Given
+        int page = 0;
+        int size = 1;
+
+        List<Folder> folders = List.of(folder);
+        when(folderRepository.findAllPosts(any(Pageable.class)))
+                .thenReturn(new PageImpl<>(folders));
+
+        List<FolderResponse> folderResponses = List.of(folderResponse);
+        Page<FolderResponse> expected = new PageImpl<>(folderResponses);
+
+        // When
+        Page<FolderResponse> result = underTest.getAll(page, size);
+
+        // Then
+        assertEquals(expected, result);
     }
 
     @Test
