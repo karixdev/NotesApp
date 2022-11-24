@@ -2,6 +2,7 @@ package com.github.karixdev.notesapp.folder;
 
 import com.github.karixdev.notesapp.exception.ResourceNotFoundException;
 import com.github.karixdev.notesapp.folder.dto.FolderResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,23 @@ public class FolderServiceTest {
     @Mock
     FolderRepository folderRepository;
 
+    Folder folder;
+    FolderResponse folderResponse;
+
+    @BeforeEach
+    void setUp() {
+        folder = Folder.builder()
+                .id(1L)
+                .name("Folder")
+                .build();
+
+        folderResponse = FolderResponse.builder()
+                .id(folder.getId())
+                .name(folder.getName())
+                .notes(folder.getNotes())
+                .build();
+    }
+
     @Test
     void GivenNonExistingFolderId_WhenGetById_ThenThrowsException() {
         // Given
@@ -42,11 +60,6 @@ public class FolderServiceTest {
         // Given
         Long id = 1L;
 
-        Folder folder = Folder.builder()
-                .id(1L)
-                .name("Folder")
-                .build();
-
         when(folderRepository.findById(any(Long.class)))
                 .thenReturn(Optional.of(folder));
 
@@ -54,34 +67,16 @@ public class FolderServiceTest {
         FolderResponse result = underTest.getById(id);
 
         // Then
-        FolderResponse expected = FolderResponse.builder()
-                .id(folder.getId())
-                .name(folder.getName())
-                .notes(folder.getNotes())
-                .build();
-
-        assertEquals(expected, result);
+        assertEquals(folderResponse, result);
     }
 
     @Test
     void GivenFolderEntity_WhenMapToFolderResponse_ThenReturnsCorrectDto() {
-        // Given
-        Folder folder = Folder.builder()
-                .id(1L)
-                .name("Folder")
-                .build();
-
         // When
         FolderResponse result = underTest.mapFolderToFolderResponse(folder);
 
         // Then
-        FolderResponse expected = FolderResponse.builder()
-                .id(folder.getId())
-                .name(folder.getName())
-                .notes(folder.getNotes())
-                .build();
-
-        assertEquals(expected, result);
+        assertEquals(folderResponse, result);
     }
 
 }
