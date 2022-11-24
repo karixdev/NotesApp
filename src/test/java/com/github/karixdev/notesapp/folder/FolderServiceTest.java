@@ -1,7 +1,6 @@
 package com.github.karixdev.notesapp.folder;
 
 import com.github.karixdev.notesapp.folder.dto.FolderResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,9 +36,7 @@ public class FolderServiceTest {
                 .notes(folder.getNotes())
                 .build();
 
-        assertEquals(expected.getId(), result.getId());
-        assertEquals(expected.getName(), result.getName());
-        assertEquals(expected.getNotes(), result.getNotes());
+        assertEquals(expected, result);
     }
 
 }
