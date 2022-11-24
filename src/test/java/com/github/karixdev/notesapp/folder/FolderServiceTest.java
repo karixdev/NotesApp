@@ -94,6 +94,48 @@ public class FolderServiceTest {
     }
 
     @Test
+    void WhenGivenNonExistingFolderId_WhenUpdate_ThenThrowsException() {
+        // Given
+        Long id = 2L;
+        FolderRequest request = new FolderRequest(folder.getName());
+
+        when(folderRepository.findById(any(Long.class)))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> underTest.update(id, request));
+    }
+
+    @Test
+    void GivenFolderRequestAndFolderId_WhenUpdate_ThenReturnsCorrectResponse() {
+        // Given
+        Long id = 1L;
+        String newName = "New name";
+        FolderRequest request = new FolderRequest(newName);
+
+        Folder updatedFolder = Folder.builder()
+                .id(folder.getId())
+                .name(newName)
+                .notes(folder.getNotes())
+                .build();
+
+        folderResponse.setName(newName);
+
+        when(folderRepository.findById(any(Long.class)))
+                .thenReturn(Optional.ofNullable(folder));
+
+        when(folderRepository.save(any(Folder.class)))
+                .thenReturn(updatedFolder);
+
+        // When
+        FolderResponse result = underTest.update(id, request);
+
+        // Then
+        assertEquals(folderResponse, result);
+    }
+
+    @Test
     void GivenNonExistingFolderId_WhenGetById_ThenThrowsException() {
         // Given
         Long id = 1L;
