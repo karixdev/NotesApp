@@ -1,7 +1,7 @@
 package com.github.karixdev.notesapp.folder.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.karixdev.notesapp.folder.Folder;
 import com.github.karixdev.notesapp.note.Note;
 import lombok.*;
 
@@ -25,6 +25,12 @@ public class FolderResponse {
     })
     @Builder.Default
     private Set<Note> notes = new LinkedHashSet<>();
+
+    public FolderResponse(Folder folder) {
+        this.id = folder.getId();
+        this.name = folder.getName();
+        this.notes = folder.getNotes();
+    }
 
     @Override
     public boolean equals(Object o) {
