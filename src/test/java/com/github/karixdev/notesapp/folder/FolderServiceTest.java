@@ -19,6 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -146,6 +147,31 @@ public class FolderServiceTest {
         // When & Then
         assertThrows(ResourceNotFoundException.class,
                 () -> underTest.getById(id));
+    }
+
+    @Test
+    void GivenNonExistingFolderId_WhenDelete_ThenThrowsException() {
+        // Given
+        Long id = 2L;
+        when(folderRepository.findById(any(Long.class)))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> underTest.delete(id));
+    }
+
+    @Test
+    void GivenExistingFolderId_WhenDelete_ThenThrowsException() {
+        // Given
+        Long id = 1L;
+
+        when(folderRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(folder));
+
+        // When
+        underTest.delete(id);
+        verify(folderRepository).delete(any(Folder.class));
     }
 
     @Test
