@@ -1,6 +1,7 @@
 package com.github.karixdev.notesapp.folder;
 
 import com.github.karixdev.notesapp.exception.ResourceNotFoundException;
+import com.github.karixdev.notesapp.folder.dto.FolderRequest;
 import com.github.karixdev.notesapp.folder.dto.FolderResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,21 @@ public class FolderServiceTest {
                 .name(folder.getName())
                 .notes(folder.getNotes())
                 .build();
+    }
+
+    @Test
+    void GivenFolderRequest_WhenCreate_ThenReturnsCorrectFolderResponse() {
+        // Given
+        FolderRequest request = new FolderRequest(folder.getName());
+
+        when(folderRepository.save(any(Folder.class)))
+                .thenReturn(folder);
+
+        // When
+        FolderResponse result = underTest.create(request);
+
+        // Then
+        assertEquals(folderResponse, result);
     }
 
     @Test
