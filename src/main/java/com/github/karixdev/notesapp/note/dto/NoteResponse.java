@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,5 +39,18 @@ public class NoteResponse {
         this.content = note.getContent();
         this.noteColor = note.getNoteColor();
         this.folder = new FolderResponse(note.getFolder());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoteResponse that = (NoteResponse) o;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && noteColor == that.noteColor && Objects.equals(folder, that.folder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, noteColor, folder);
     }
 }
