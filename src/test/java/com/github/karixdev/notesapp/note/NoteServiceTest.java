@@ -3,9 +3,11 @@ package com.github.karixdev.notesapp.note;
 import com.github.karixdev.notesapp.exception.ResourceNotFoundException;
 import com.github.karixdev.notesapp.folder.Folder;
 import com.github.karixdev.notesapp.folder.FolderService;
+import com.github.karixdev.notesapp.folder.dto.FolderRequest;
 import com.github.karixdev.notesapp.folder.dto.FolderResponse;
 import com.github.karixdev.notesapp.note.dto.NoteRequest;
 import com.github.karixdev.notesapp.note.dto.NoteResponse;
+import org.aspectj.weaver.ast.Not;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -170,4 +173,86 @@ public class NoteServiceTest {
         assertEquals(noteResponse, result);
     }
 
+    @Test
+    void GivenNotExistingNoteId_WhenDelete_ThenThrowsException() {
+        // Given
+        Long id = 10L;
+
+        when(noteRepository.findById(any(Long.class)))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> underTest.delete(id));
+    }
+
+    @Test
+    void GivenExistingFolderId_WhenDelete_ThenThrowsException() {
+        // Given
+        Long id = 1L;
+
+        when(noteRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(note));
+
+        // When
+        underTest.delete(id);
+        verify(noteRepository).delete(any(Note.class));
+    }
+
+    @Test
+    void WhenGivenNonExistingNoteId_WhenUpdate_ThenThrowsException() {
+        // Given
+        Long id = 2L;
+
+        NoteRequest request = new NoteRequest();
+        request.setFolderId(note.getFolder().getId());
+        request.setNoteColor(note.getNoteColor());
+        request.setTitle(note.getTitle());
+        request.setContent(note.getContent());
+
+        when(noteRepository.findById(any(Long.class)))
+                .thenReturn(Optional.empty());
+
+        // When & Then
+        assertThrows(ResourceNotFoundException.class,
+                () -> underTest.update(id, request));
+    }
+
+    @Test
+    void GivenNoteRequestAndNoteId_WhenUpdate_ThenReturnsCorrectResponse() {
+        // Given
+        Long id = 1L;
+        String newTitle = "New title";
+
+        NoteRequest request = new NoteRequest();
+        request.setFolderId(note.getFolder().getId());
+        request.setNoteColor(note.getNoteColor());
+        request.setTitle(newTitle);
+        request.setContent(note.getContent());
+
+        Note updatedNote = Note.builder()
+                .id(note.getId())
+                .title(newTitle)
+                .content(note.getContent())
+                .noteColor(note.getNoteColor())
+                .folder(note.getFolder())
+                .build();
+
+        noteResponse.setTitle(newTitle);
+
+        when(folderService.getByIdOrThrowException(any(Long.class)))
+                .thenReturn(updatedNote.getFolder());
+
+        when(noteRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(note));
+
+        when(noteRepository.save(any(Note.class)))
+                .thenReturn(updatedNote);
+
+        // When
+        NoteResponse result = underTest.update(id, request);
+
+        // Then
+        assertEquals(noteResponse, result);
+    }
 }

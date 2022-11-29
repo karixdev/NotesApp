@@ -73,12 +73,6 @@ public class NoteService {
     }
 
     public NoteResponse mapNoteToNoteResponse(Note note) {
-        return NoteResponse.builder()
-                .id(note.getId())
-                .title(note.getTitle())
-                .content(note.getContent())
-                .noteColor(note.getNoteColor())
-                .folder(folderService.mapFolderToFolderResponse(note.getFolder()))
-                .build();
+        return new NoteResponse(note);
     }
 }
